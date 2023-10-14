@@ -1,17 +1,33 @@
 from rembg import remove
 from PIL import Image
+import tkinter as tk
+from tkfilebrowser import askopenfilename
 
-# Store path of the image in the variable input_path 
-input_path = "/home/aigo/Documents/GitHub/PyMortalKombat/Sprites/00.png"
 
-# Store path of the output image in the variable output_path 
-output_path = input_path
+font = ("Roboto-Medium.ttf",40)
+font2 = ("Roboto-Medium.ttf",28)
 
-# Processing the image 
-input = Image.open(input_path)
+window = tk.Tk()
+window.title("Background Remover")
+window.geometry("400x200")
 
-# Removing the background from the given Image 
-output = remove(input)
+def browseFile():
+    file = askopenfilename(parent=window, initialdir=' ', initialfile='png',
+                           filetypes=[("Pictures", "*.png|*.jpg|*.JPG"),
+                                      ("All files", "*")])
+    return str(file)
 
-# Saving the image in the given path
-output.save(output_path) 
+rowText = tk.Label(window,text="Select Image",font=font2)
+rowText.pack()
+def removeBackground():
+    path = browseFile()
+    input = Image.open(path)
+    output_path = path
+    output = remove(input)
+    output.save(output_path)
+
+
+searchButton = tk.Button(window,text="Browse Image",command=removeBackground)
+searchButton.pack()
+
+window.mainloop()
